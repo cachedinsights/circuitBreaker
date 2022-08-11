@@ -1,0 +1,28 @@
+server:
+  port: 8082
+
+resilience4j:
+  circuitbreaker:
+    instances:
+      serviceA:
+        registerHealthIndicator: true
+        slidingWindowSize: 10
+        slidingWindowType: TIME_BASED
+        failureRateThreshold: 40
+        waitDurationInOpenState: 10s
+        minimumNumberOfCalls: 5           # Minimum no of calls required before the CB to calculate the failure or slow rate.
+        automaticTransitionFromOpenToHalfOpenEnabled: true
+        permittedNumberOfCallsInHalfOpenState: 4
+
+management:
+  health:
+    circuitbreakers:
+      enabled: true
+  endpoints:
+    web:
+      exposure:
+        include:
+          - health
+  endpoint:
+    health:
+      show-details: always
